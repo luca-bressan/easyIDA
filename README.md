@@ -2,6 +2,8 @@
 
 **easyIDA** is a Julia script designed to simulate intraday power auctions for electricity markets that operate based on the Available Transfer Capacity (ATC) model. This tool allows users to run simulations by simply supplying the required market data in a CSV file, enabling them to analyze and understand the behavior of power auctions.
 
+This repo also includes sample data from the Italian IDA1 session with flowdate August 3rd, 2024. Public offer data is exclusive property of Gestore dei Mercati Energetici S.p.A. and is hereby redistributed for educational purposes only.
+
 ## Features
 
 - **Simulate Intraday Auctions:** Simulates the intraday power auction process based on the ATC model.
