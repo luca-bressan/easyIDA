@@ -36,16 +36,16 @@ To use **easyIDA**, you need to have [Julia](https://julialang.org/downloads/) i
 1. Prepare your market data file in the required format (see [mkt.csv](mkt.csv) and [grid_topology.csv](grid_topology.csv)).
 
 2. Run the script with the market data as input:
-    ```bash
-    julia easyIDA.jl path_to_your_market_data_file path_to_output_folder
+    ```pwsh
+    julia easyIDA.jl path_to_your_market_data_file path_to_your_grid_topology_file path_to_output_folder
     ```
 
-3. The script will output the results of the simulation, including key metrics and any generated reports.
+3. The script will output the results of the simulation, including key metrics.
 
 ### Example
 
 Here’s a basic example of how to run the script:
 
-```bash
-julia easyIDA.jl ./mkt.csv ./output
+```pwsh
+julia easyIDA.jl ./mkt.csv ./grid_topology ./output
 ```
