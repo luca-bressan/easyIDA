@@ -27,8 +27,29 @@
 using JuMP, HiGHS, DataFrames, CSV
 
 # Importing data. See attached templates for an example of the supported format.
-mktdata = CSV.read("2024080311MIA1_mktdata.csv", DataFrames.DataFrame)
-grid_topology = CSV.read("2024080311MIA1_grid_topology.csv", DataFrames.DataFrame)
+mktdata_file = ""
+grid_topology_file = ""
+outfolder = ""
+mktdata = DataFrame()
+grid_topology = DataFrame()
+market_results = DataFrame()
+if isfile(ARGS[1])
+    mktdata = CSV.read(ARGS[1], DataFrames.DataFrame)
+else
+    error("Could not find market data file.")
+end
+
+if isfile(ARGS[2])
+    grid_topology = CSV.read(ARGS[2], DataFrames.DataFrame)
+else
+    error("Could not find grid topology file.")
+end
+
+if isdir(ARGS[3])
+    outfolder = ARGS[3]
+else
+    error("Not a valid output folder.")
+end
 
 # Create model
 model = Model(HiGHS.Optimizer)
@@ -111,4 +132,7 @@ for zonal_results in eachrow(market_results)
         )
 end
 
-show(stdout, "text/plain", market_results)
+# Writing results to disk. Bye bye!
+cd(outfolder)
+touch("results.csv")
+CSV.write("results.csv",market_results)
