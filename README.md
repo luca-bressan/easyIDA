@@ -18,7 +18,7 @@ To use **easyIDA**, you need to have [Julia](https://julialang.org/downloads/) i
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/easyIDA.git
+    git clone https://github.com/luca-bressan/easyIDA.git
     cd easyIDA
     ```
 
