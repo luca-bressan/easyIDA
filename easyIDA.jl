@@ -54,7 +54,7 @@ sourcing_constraint = @constraint(model,
     -sum(mktdata.QTY[mktdata.ZONE.==zone, :] .*
     mktdata.x[mktdata.ZONE.==zone, :]) <=
     sum(grid_topology.ATC[grid_topology.SOURCE.==zone])
-) # No bidding zone shall import more energy than the sum of ATC for lines having such zone as their source
+) # No bidding zone shall export more energy than the sum of ATC for lines having such zone as their source
 
 @objective(model, Max, sum((mktdata.PRICE .* mktdata.QTY .* x))) # Maximize exchanged value
 
