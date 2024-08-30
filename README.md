@@ -47,5 +47,5 @@ To use **easyIDA**, you need to have [Julia](https://julialang.org/downloads/) i
 Here’s a basic example of how to run the script:
 
 ```pwsh
-julia easyIDA.jl ./mkt.csv ./grid_topology ./output
+julia easyIDA.jl ./mkt.csv ./grid_topology.csv ./output
 ```
