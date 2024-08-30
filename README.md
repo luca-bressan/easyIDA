@@ -33,7 +33,7 @@ To use **easyIDA**, you need to have [Julia](https://julialang.org/downloads/) i
 
 ### Usage
 
-1. Prepare your market data file in the required format (see [mkt.csv] and [grid_topology.csv]).
+1. Prepare your market data file in the required format (see [mkt.csv](mkt.csv) and [grid_topology.csv](grid_topology.csv)).
 
 2. Run the script with the market data as input:
     ```bash
