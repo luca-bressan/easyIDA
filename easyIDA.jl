@@ -1,5 +1,5 @@
 ###############################################################################
-# easyIDA, as updated on August 30th, 2024
+# easyIDA, as updated on August 31th, 2024
 ###############################################################################
 # MIT License
 #
@@ -101,7 +101,9 @@ sourcing_constraint = @constraint(model,
 # Summon magical gnomes
 optimize!(model)
 
-# Compute market results TODO: add line usage and remove some ugliness
+
+
+# Compute market results TODO: remove some ugliness
 market_results = DataFrames.DataFrame()
 market_results.zone = zones
 market_results.unconstrained_price = ones(length(zones)) * value(MCP_UNC)
@@ -132,7 +134,48 @@ for zonal_results in eachrow(market_results)
         )
 end
 
+# Recover line usages
+line_usage_model = Model(HiGHS.Optimizer)
+grid_topology.LINE_NO = [1:length(grid_topology.LINE_ID);] # Indexing lines
+@variable(line_usage_model, 0<= t[i=grid_topology.LINE_NO] <= grid_topology.ATC[i])
+grid_topology.t = Array(t)
+@constraint(line_usage_model,
+            [zone in zones],
+            market_results.consumption[market_results.zone .== zone] .-
+            market_results.generation[market_results.zone .== zone] .==
+            sum(grid_topology.t[grid_topology.DESTINATION .== zone]) .-
+            sum(grid_topology.t[grid_topology.SOURCE .== zone])
+            )
+
+# Summon more magical gnomes
+optimize!(line_usage_model)
+
+# Prepare line usage statistics
+grid_topology2 = grid_topology # Separate problem facts with variables from problem solution
+grid_topology2.t = JuMP.value.(grid_topology.t)
+line_usages = DataFrame(source = String[], destination = String[], flow = Float64[])
+already_checked_lines = String[]
+for line in eachrow(grid_topology2) # TODO: is there a nicer way to do this? Feels clunky
+    if !(line.LINE_ID in already_checked_lines)
+        forward_flow = line.t
+        source = line.SOURCE
+        destination = line.DESTINATION
+        backward_flow = 0.0
+        for opposite_candidate in eachrow(grid_topology2)
+            if opposite_candidate.SOURCE == destination && opposite_candidate.DESTINATION == source
+                backward_flow = opposite_candidate.t 
+            end
+        end
+        push!(already_checked_lines,destination*source)
+        push!(line_usages,[line.SOURCE, line.DESTINATION, forward_flow-backward_flow])
+    end
+end
+
+
+
 # Writing results to disk. Bye bye!
 cd(outfolder)
 touch("results.csv")
 CSV.write("results.csv",market_results)
+touch("line_usages.csv")
+CSV.write("results.csv",line_usages)

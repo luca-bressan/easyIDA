@@ -19,12 +19,14 @@ To use **easyIDA**, you need to have [Julia](https://julialang.org/downloads/) i
 ### Installation
 
 1. Clone the repository:
+
     ```bash
     git clone https://github.com/luca-bressan/easyIDA.git
     cd easyIDA
     ```
 
 2. Install the required Julia packages:
+
     ```julia
     using Pkg
     Pkg.add("CSV")
@@ -51,3 +53,13 @@ Here’s a basic example of how to run the script:
 ```pwsh
 julia easyIDA.jl ./mkt.csv ./grid_topology.csv ./output
 ```
+
+## Current limitations
+
+### I am simulating the Italian IDAx and I get a mismatch between real consumptions/generations and line usages, why?
+
+The Italian grid forms a cycle (SARD -> CORS -> CNOR -> CSUD -> SARD). For example, if you wanted to send energy from Florence to Naples, basic physics dictates that the most efficient route is through Latium, rather than taking a detour through Corsica, Sardinia, and then back to Latium before reaching Naples. However, since the model doesn't account for line losses, it may treat both paths as equally viable, even though one is less efficient. While this might lead to mismatches in energy flow, you can rest assured that prices are being calculated correctly. In the case of congestion, one of those paths will be blocked, eliminating flow indeterminacy, and the model results will align with real data.
+
+### My market has specific additional constraints/products that are not being modeled, what should I do?
+
+Fork this repo and adapt the model to your needs! The model is designed for a generic ATC-based market, serving as a foundation for further development rather than a specialized tool. Since I primarily work in the Italian market, there may be future specialization in that area (e.g., adding generalized cross-border constraints). Block orders will be implemented at a later stage, but UPP (PUN) calculation will not be included due to the upcoming TIDE reforms.
