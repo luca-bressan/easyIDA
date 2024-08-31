@@ -56,7 +56,7 @@ julia easyIDA.jl ./mkt.csv ./grid_topology.csv ./output
 
 ## Current limitations
 
-### I am simulating the Italian IDAx and I get a mismatch between real consumptions/generations and line usages, why?
+### I am simulating the Italian IDAx and I get a mismatch between real and simulated consumptions/generations/line usages, why?
 
 The Italian grid forms a cycle (SARD -> CORS -> CNOR -> CSUD -> SARD). For example, if you wanted to send energy from Florence to Naples, basic physics dictates that the most efficient route is through Latium, rather than taking a detour through Corsica, Sardinia, and then back to Latium before reaching Naples. However, since the model doesn't account for line losses, it may treat both paths as equally viable, even though one is less efficient. While this might lead to mismatches in energy flow, you can rest assured that prices are being calculated correctly. In the case of congestion, one of those paths will be blocked, eliminating flow indeterminacy, and the model results will align with real data.
 
